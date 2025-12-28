@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ===== CONFIG =====
-KEY_PATH=~/buildserver.pem
-EC2_USER=ec2-user
-EC2_HOST=3.237.71.74
+#KEY_PATH=~/buildserver.pem
+#EC2_USER=ec2-user
+#EC2_HOST=3.237.71.74
 
 IMAGE_NAME="$1"
 CONTAINER_NAME=react-app
@@ -24,29 +24,29 @@ fi
 
 echo "🚀 Deploying $IMAGE_NAME"
 
-ssh -i "$KEY_PATH" ${EC2_USER}@${EC2_HOST} << EOF
-  set -e
+#ssh -i "$KEY_PATH" ${EC2_USER}@${EC2_HOST} << EOF
+set -e
 
-  echo "🔐 Docker login"
-  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+echo "🔐 Docker login"
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-  echo "📥 Pulling image"
-  docker pull $IMAGE_NAME
+echo "📥 Pulling image"
+docker pull $IMAGE_NAME
 
-  echo "🛑 Stopping old container"
-  docker stop $CONTAINER_NAME || true
-  docker rm $CONTAINER_NAME || true
+echo "🛑 Stopping old container"
+docker stop $CONTAINER_NAME || true
+docker rm $CONTAINER_NAME || true
 
-  echo "▶️ Running new container"
-  docker run -d \
-    --name $CONTAINER_NAME \
-    -p ${PORT}:${CONTAINER_PORT} \
-    --restart unless-stopped \
-    $IMAGE_NAME
+echo "▶️ Running new container"
+docker run -d \
+  --name $CONTAINER_NAME \
+  -p ${PORT}:${CONTAINER_PORT} \
+  --restart unless-stopped \
+  $IMAGE_NAME
 
-  echo "🧹 Logout from Docker"
-  docker logout
+echo "🧹 Logout from Docker"
+docker logout
 
-  echo "✅ Deployment successful"
-EOF
+echo "✅ Deployment successful"
+#EOF
 
