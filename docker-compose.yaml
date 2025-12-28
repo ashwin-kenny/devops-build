@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   react-nginx:
-    image: ${IMAGE}
+    image: ${IMAGE_NAME}
     build:
       context: .
       dockerfile: Dockerfile
